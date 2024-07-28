@@ -5,13 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chrome Extension Permission Remover</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-    <style>
+ <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
         }
         input, button {
+            display: block;
             margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="file"] {
+            padding: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #downloadLink {
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            width: fit-content;
+        }
+        #downloadLink:hover {
+            background-color: #218838;
         }
     </style>
 </head>
