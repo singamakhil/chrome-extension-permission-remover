@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Extension Permission Remover</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chrome Extension Permission Remover</h1>
+    <input type="file" id="extensionFile" accept=".zip">
+    <br>
+    <input type="text" id="permissionToRemove" placeholder="Enter permission to remove">
+    <br>
+    <button onclick="removePermission()">Remove Permission</button>
+    <br>
+    <a id="downloadLink" style="display:none;">Download Modified Extension</a>
+
+    <script>
+        async function removePermission() {
+            const fileInput = document.getElementById('extensionFile');
+            const permissionToRemove = document.getElementById('permissionToRemove').value;
+            
+            if (!fileInput.files.length) {
+                alert('Please upload an extension file.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const jszip = new JSZip();
+
+            try {
+                const zip = await jszip.loadAsync(file);
+                const manifest = await zip.file('manifest.json').async('text');
+                let manifestObj = JSON.parse(manifest);
+
+                if (manifestObj.permissions) {
+                    manifestObj.permissions = manifestObj.permissions.filter(permission => permission !== permissionToRemove);
+                }
+
+                zip.file('manifest.json', JSON.stringify(manifestObj, null, 2));
+
+                const modifiedZip = await zip.generateAsync({ type: 'blob' });
+                const url = URL.createObjectURL(modifiedZip);
+
+                const downloadLink = document.getElementById('downloadLink');
+                downloadLink.href = url;
+                downloadLink.download = 'modified_extension.zip';
+                downloadLink.style.display = 'block';
+                downloadLink.textContent = 'Download Modified Extension';
+            } catch (error) {
+                alert('Error processing the extension file: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
